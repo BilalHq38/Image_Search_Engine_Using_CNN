@@ -1,0 +1,360 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Image Search Engine</title>
+
+  <!-- Tailwind CSS (for dev) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- AOS Animation Library -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+  <!-- Feather Icons -->
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: { 500: '#3B82F6', 600: '#2563EB', },
+            dark: { 800: '#1E293B', 900: '#0F172A', }
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    .animate-pulse { animation: pulse 2s infinite; }
+    .card-hover:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+    }
+    .transition-all {
+      transition: all 0.15s ease-in-out;
+    }
+    .bg-glass {
+      background: rgba(15,23,42,0.8);
+      backdrop-filter: blur(10px);
+    }
+    /* Ensure input text is visible in dark mode */
+    input, input[type=number], input[type=password] {
+      color: #FFFFFF;
+    }
+    input:focus, input[type=number]:focus, input[type=password]:focus {
+      outline: none;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 dark:bg-dark-900 min-h-screen transition-colors duration-300">
+
+  <!-- PASSWORD OVERLAY -->
+  <div id="password-overlay" class="fixed inset-0 bg-black bg-opacity-90 flex justify-center items-center z-50 px-4">
+    <div class="bg-dark-800 text-white p-6 rounded-xl shadow-2xl w-full max-w-md text-center">
+      <i data-feather="lock" class="w-12 h-12 text-primary-500 mb-4"></i>
+      <h2 class="text-2xl font-semibold mb-4">Enter Password</h2>
+      <input type="password" id="password-input" placeholder="Enter password"
+        class="w-full px-3 py-2 text-sm rounded-md bg-black bg-opacity-30 text-black placeholder-gray-400 focus:ring-2 focus:ring-primary-500" />
+      <div id="password-error" class="text-red-400 text-sm mt-2 hidden">Incorrect password. Please try again.</div>
+      <button id="password-submit"
+        class="mt-4 w-full bg-primary-500 hover:bg-primary-600 text-white font-medium py-2 rounded-lg transition-colors">
+        Continue
+      </button>
+    </div>
+  </div>
+
+  <!-- MAIN CONTAINER -->
+  <div class="container mx-auto px-4 py-8 w-full h-full">
+    <header class="mb-10 text-center" data-aos="fade-down">
+      <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-2">Image Search Engine</h1>
+      <p class="text-gray-600 dark:text-gray-300">Upload an image to find visually similar matches</p>
+    </header>
+
+    <main class="max-w-4xl mx-auto">
+      <form id="upload-form"
+        class="bg-white dark:bg-dark-800 rounded-xl shadow-lg p-4 mb-8 w-full" data-aos="fade-up">
+        <div class="space-y-6">
+            
+    
+
+<!-- IMAGE UPLOAD (Compact) -->
+<div class="w-full max-w-xs mx-auto">
+  <label for="image-input" class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Upload Image</label>
+
+  
+  <label for="image-input" id="upload-box"
+    class="relative flex items-center justify-center w-full h-32 bg-gray-50 dark:bg-dark-700 border border-dashed border-gray-300 dark:border-gray-600 rounded-md cursor-pointer overflow-hidden hover:border-primary-500 transition-all">
+    
+    <i data-feather="upload" class="w-5 h-5 text-gray-400"></i>
+    
+    <p class="text-xs text-gray-500 dark:text-gray-400 text-center">
+      <span class="font-semibold text-primary-500">Click to upload</span> or drag and drop
+    </p>
+    
+    <p class="text-[10px] text-gray-500 dark:text-gray-400 text-center">PNG, JPG, GIF up to 10MB</p>
+  </label>
+
+  <input type="file" name="query_image" id="image-input" accept="image/*" required class="hidden" />
+</div>
+
+<div id="preview" class="flex justify-center mt-2"></div>
+
+
+          <!-- RESULT COUNT -->
+          <div>
+            <div class="flex justify-between items-center mb-2">
+              <label for="result-count"
+                class="block text-sm font-medium text-gray-700 dark:text-gray-300">Number of results</label>
+              <span id="result-count-display" class="text-sm text-gray-500 dark:text-gray-400">25</span>
+            </div>
+            <div class="flex items-center space-x-4 ">
+              <input type="range" id="result-count-range" min="1" max="250" value="25" step="1"
+                class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 " />
+              <input type="number" id="result-count" value="25" min="1" max="250" step="1"
+                class="w-20 px-2 py-1 text-sm text-center border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-dark-700 dark:text-black" />
+            </div>
+          </div>
+
+          <!-- SUBMIT BUTTON -->
+          <button type="submit"
+            class="w-full flex items-center justify-center px-6 py-3 text-base font-medium text-white bg-primary-500 hover:bg-primary-600 rounded-md transition-colors">
+            <i data-feather="search" class="w-5 h-5 mr-2"></i> Search Images
+          </button>
+        </div>
+      </form>
+
+      <!-- PROGRESS BAR -->
+      <div id="progress-bar" class="hidden w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5 mb-8">
+        <div class="bg-primary-500 h-2.5 rounded-full" style="width: 0%"></div>
+      </div>
+
+      <p id="note" class="text-sm text-gray-500 dark:text-gray-400 mb-8 text-center"></p>
+
+      <h2 id="results-title"
+        class="text-2xl font-bold text-gray-900 dark:text-white mb-6 hidden text-center" data-aos="fade-up">
+        Top Matches
+      </h2>
+
+      <div id="results"
+        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full"></div>
+    </main>
+  </div>
+
+  <!-- IMAGE MODAL -->
+  <div id="modal"
+    class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-90 p-4">
+    <div class="relative max-w-4xl w-full">
+      <button id="modal-close"
+        class="absolute -top-12 right-0 text-white hover:text-gray-300 transition-colors">
+        <i data-feather="x" class="w-8 h-8"></i>
+      </button>
+      <img id="modal-img" src="" alt="Preview"
+        class="max-h-[80vh] w-auto mx-auto rounded-lg shadow-2xl" />
+      <div id="modal-filename" class="mt-4 text-center text-white font-medium"></div>
+    </div>
+  </div>
+
+  <!-- SCRIPTS -->
+  <script>
+    AOS.init({ duration: 600, easing: 'ease-out-quad', once: true });
+    feather.replace();
+
+    // DOM elements
+    const imageInput = document.getElementById('image-input');
+    const preview = document.getElementById('preview');
+    const form = document.getElementById('upload-form');
+    const resultsDiv = document.getElementById('results');
+    const resultsTitle = document.getElementById('results-title');
+    const progressBar = document.getElementById('progress-bar');
+    const progressFill = progressBar.querySelector('div');
+    const resultCountInput = document.getElementById('result-count');
+    const resultCountRange = document.getElementById('result-count-range');
+    const resultCountDisplay = document.getElementById('result-count-display');
+    const note = document.getElementById('note');
+    const modal = document.getElementById('modal');
+    const modalImg = document.getElementById('modal-img');
+    const modalClose = document.getElementById('modal-close');
+    const modalFilename = document.getElementById('modal-filename');
+    const originalTitle = document.title;
+
+    const overlay = document.getElementById('password-overlay');
+    const passwordInput = document.getElementById('password-input');
+    const passwordSubmit = document.getElementById('password-submit');
+    const errorText = document.getElementById('password-error');
+    const CORRECT_PASSWORD = 'password'; // Change this to your password
+
+    // Sync all three displays: range, number input, and the text display
+    function syncResultCount(value) {
+      let v = parseInt(value);
+      if (isNaN(v)) v = 1;
+      v = Math.max(1, Math.min(250, v));
+      resultCountInput.value = v;
+      resultCountRange.value = v;
+      resultCountDisplay.textContent = v;
+    }
+
+    resultCountRange.addEventListener('input', (e) => {
+      syncResultCount(e.target.value);
+    });
+
+    resultCountInput.addEventListener('input', (e) => {
+      syncResultCount(e.target.value);
+    });
+
+    // Preview selected image and replace upload box
+    imageInput.addEventListener('change', () => {
+      const file = imageInput.files[0];
+      const uploadBox = document.getElementById('upload-box'); // Ensure uploadBox is targeted
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          uploadBox.style.display = 'none'; // Hide the upload box
+          preview.innerHTML = `
+            <div class="relative group" data-aos="fade-up">
+              <div class="absolute inset-0 bg-gradient-to-br from-primary-500 to-purple-600 rounded-xl opacity-75 group-hover:opacity-100 transition-opacity"></div>
+              <img src="${e.target.result}" alt="Query Image"
+                class="relative z-10 w-full h-32 object-cover rounded-xl shadow-lg transform group-hover:-translate-y-1 transition-transform" />
+            </div>
+          `;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // Handle form submission
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(form);
+      const limit = parseInt(resultCountInput.value) || 25;
+      formData.append("result_count", limit);
+
+      resultsDiv.innerHTML = '';
+      resultsTitle.classList.add('hidden');
+      note.textContent = '';
+      progressBar.classList.remove('hidden');
+      progressFill.style.width = '10%';
+
+      try {
+        const progressInterval = setInterval(() => {
+          const currentWidth = parseInt(progressFill.style.width);
+          if (currentWidth < 90) {
+            progressFill.style.width = `${currentWidth + 10}%`;
+          }
+        }, 300);
+
+        const response = await fetch('/search', { method: 'POST', body: formData });
+        clearInterval(progressInterval);
+        progressFill.style.width = '100%';
+
+        const data = await response.json();
+        const results = Array.isArray(data.results) ? data.results : [];
+
+        if (data.note) note.textContent = data.note;
+
+        if (results.length > 0) {
+          resultsTitle.textContent = `Top ${Math.min(results.length, limit)} Matches`;
+          resultsTitle.classList.remove('hidden');
+
+          results.slice(0, limit).forEach((item, index) => {
+            const card = document.createElement('div');
+            card.className = 'card-hover transition-all bg-white dark:bg-dark-800 rounded-xl overflow-hidden shadow-md hover:shadow-xl';
+            card.setAttribute('data-aos', 'fade-up');
+            card.setAttribute('data-aos-delay', `${index * 50}`);
+
+            const img = document.createElement('img');
+            img.src = item.path;
+            img.alt = item.filename;
+            img.className = 'w-full h-64 object-cover';
+            img.loading = index < 20 ? 'eager' : 'lazy';
+            const modifiedDate = new Date(item.modified * 1000);
+            img.title = `Filename: ${item.filename}\nModified: ${modifiedDate.toLocaleString()}\nScore: ${item.score}`;
+
+            img.addEventListener('click', () => {
+              modalImg.src = item.path;
+              modalFilename.textContent = item.filename;
+              modal.classList.remove('hidden');
+              document.title = item.filename;
+            });
+
+            const meta = document.createElement('div');
+            meta.className = 'p-4';
+            meta.innerHTML = `
+              <p class="text-sm font-medium text-gray-900 dark:text-white truncate">${item.filename}</p>
+              <div class="flex justify-between items-center mt-2">
+                <span class="text-xs text-gray-500 dark:text-gray-400">${modifiedDate.toLocaleDateString()}</span>
+                <span class="text-xs px-2 py-1 rounded-full ${item.exact ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'}">${item.exact ? 'Exact Match' : `Score: ${item.score}`}</span>
+              </div>
+            `;
+
+            card.appendChild(img);
+            card.appendChild(meta);
+            resultsDiv.appendChild(card);
+          });
+        } else {
+          resultsTitle.textContent = "No matches found";
+          resultsTitle.classList.remove('hidden');
+        }
+
+      } catch (err) {
+        console.error("Search error:", err);
+        resultsTitle.textContent = "An error occurred during search";
+        resultsTitle.classList.remove('hidden');
+      } finally {
+        setTimeout(() => {
+          progressBar.classList.add('hidden');
+          progressFill.style.width = '0%';
+        }, 500);
+      }
+    });
+
+    // Modal close behavior
+    modalClose.addEventListener('click', () => {
+      modal.classList.add('hidden');
+      modalImg.src = '';
+      modalFilename.textContent = '';
+      document.title = originalTitle;
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        modalClose.click();
+      }
+    });
+
+    // Password overlay verification
+    function verifyPassword() {
+      if (passwordInput.value === CORRECT_PASSWORD) {
+        overlay.classList.add('hidden');
+        errorText.classList.add('hidden');
+        passwordInput.value = '';
+      } else {
+        errorText.classList.remove('hidden');
+        passwordInput.classList.add('animate-pulse');
+        setTimeout(() => passwordInput.classList.remove('animate-pulse'), 1000);
+      }
+    }
+
+    passwordInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') verifyPassword();
+    });
+    passwordSubmit.addEventListener('click', verifyPassword);
+
+    // Dark mode toggle (optional)
+    const toggle = document.createElement('button');
+    toggle.className = 'fixed bottom-6 right-6 bg-dark-800 text-white p-3 rounded-full shadow-lg z-40 hover:bg-dark-700 transition-colors';
+    toggle.innerHTML = '<i data-feather="moon"></i>';
+    toggle.addEventListener('click', () => {
+      document.documentElement.classList.toggle('dark');
+      toggle.innerHTML = document.documentElement.classList.contains('dark') ? '<i data-feather="sun"></i>' : '<i data-feather="moon"></i>';
+      feather.replace();
+    });
+    document.body.appendChild(toggle);
+
+  </script>
+</body>
+</html>

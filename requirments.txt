@@ -1,0 +1,8 @@
+flask
+torch
+torchvision
+tqdm
+faiss-cpu
+pillow
+numpy
+git+https://github.com/openai/CLIP.git
