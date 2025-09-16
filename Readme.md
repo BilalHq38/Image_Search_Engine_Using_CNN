@@ -1,7 +1,7 @@
-Image Search Engine
+Image Search Engine:
 A powerful, multi-featured Image Search Engine built with Flask, PyTorch, CLIP, ResNet, and FAISS, capable of finding visually similar images based on deep features and color histograms.
 
-Features
+Features:
 Search by Image: Upload an image and find visually similar results.
 Multi-modal Feature Extraction:
 CLIP ViT-B/32 (semantic embeddings)
@@ -10,28 +10,27 @@ Color Histograms (HSV)
 Fast Similarity Search using FAISS (cosine similarity)
 
 Caching: Embeddings are saved to speed up startup.
-Password Protected UI
 
+Password Protected UI
 Dark Mode, Tailwind CSS UI, and responsive layout
 Live Preview & Modal View for search results
 Ready to deploy on localhost or cloud services
 
-How It Works
+How It Works:
 Feature Extraction
 Each image is transformed into a 5120-dimensional vector:
 512 from CLIP (ViT-B/32)
 4096 from ResNet50 (average + max pooled features)
 512 from HSV color histogram (8x8x8)
-
 Similarity Search
 Vectors are L2-normalized and stored in a FAISS IndexFlatIP (Inner Product Index).
 When an image is uploaded, its embedding is extracted and compared to others in the index.
 Optionally detects exact matches using MD5 hash.
 
-Caching
+Caching:
 Feature vectors and metadata are cached in image_features.pkl to avoid re-processing.
 
-Requirements
+Requirements:
 Install Python dependencies:
 pip install -r requirements.txt
 requirements.txt
@@ -48,14 +47,14 @@ python app.py
 Open your browser and go to:
 http://localhost:5050
 
-UI Password Protection
+UI Password Protection:
 When the page loads, users are prompted to enter a password.
 Default password: password
 
 To change it, update this line in the HTML:
 const CORRECT_PASSWORD = 'password'; // Change this
 
-Usage Guide
+Usage Guide:
 Searching for Similar Images
 Go to the home page.
 Upload a query image (JPG, PNG, etc.)
@@ -79,7 +78,7 @@ Folder Structure
 │   └── index.html            # Frontend HTML
 
 
-Example Use Cases
+Example Use Cases:
 Product image search (e.g. “find shoes like this”)
 Art or visual style similarity
 Duplicate image detection
@@ -95,16 +94,16 @@ Railway.app
 Make sure to adjust the UPLOAD_FOLDER and IMAGE_FOLDER paths if deploying to a different environment.
 Set a strong password in production!
 
-To-Do / Enhancements
+To-Do / Enhancements:
  Add support for reverse color search
  Add pagination or infinite scroll
  Use CLIP text queries
  User image gallery
 
-License
+License:
 MIT License — use it freely, commercially, and open-source.
 
-Acknowledgments
+Acknowledgments:
 OpenAI CLIP
 FAISS by Facebook AI
 Torchvision Models
