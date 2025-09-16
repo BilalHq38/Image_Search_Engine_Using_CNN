@@ -2,9 +2,7 @@ Image Search Engine
 A powerful, multi-featured Image Search Engine built with Flask, PyTorch, CLIP, ResNet, and FAISS, capable of finding visually similar images based on deep features and color histograms.
 
 Features
-
 Search by Image: Upload an image and find visually similar results.
-
 Multi-modal Feature Extraction:
 CLIP ViT-B/32 (semantic embeddings)
 ResNet50 (deep vision features)
