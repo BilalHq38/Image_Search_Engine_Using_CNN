@@ -2,6 +2,7 @@
 
 A compact, self-hosted image search engine built with Flask and deep visual embeddings. It uses CLIP and ResNet for feature extraction plus HSV color histograms and FAISS for fast similarity search.
 
+
 ## Problem Statement
 
 In domains like jewelery designing, fashion, and creative industries, organizations often accumulate thousands of images over time. Without an efficient search system, it becomes extremely difficult to check whether a specific design or concept already exists in the collection. Traditional keyword-based search is insufficient for visual data, as many designs lack descriptive metadata.
@@ -14,6 +15,8 @@ To address this challenge, this project provides a content-based image search en
 - ⚡ Fast nearest-neighbor search using FAISS
 - 💾 Persistent feature cache to speed startup (`image_features.pkl`)
 - 🔐 Simple password-protected UI with a responsive layout
+
+The results are fetched from the database on the basis of similarity score
 
 ## Table of Contents
 
