@@ -70,26 +70,29 @@
   </div>
 
   <!-- MAIN CONTAINER -->
-  <div class="container mx-auto px-4 py-8 w-full h-full">
-    <header class="mb-10 text-center" data-aos="fade-down">
-      <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-2">Image Search Engine</h1>
-      <p class="text-gray-600 dark:text-gray-300">Upload an image to find visually similar matches</p>
-    </header>
+  <!-- Use full width while keeping comfortable horizontal padding -->
+  <!-- Header placed above the two-column layout -->
+  <header class="mb-6 text-center aos-init aos-animate" data-aos="fade-down">
+    <h1 class="text-3xl font-semibold text-gray-900 dark:text-white mb-1">Image Search Engine</h1>
+    <p class="text-gray-600 dark:text-gray-300 text-sm">Upload an image to find visually similar matches</p>
+  </header>
 
-    <main class="max-w-4xl mx-auto">
+  <div class="w-full px-6 md:px-10 lg:px-16 py-8 h-full lg:flex lg:items-start lg:space-x-8">
+
+  <main class="w-full lg:w-80">
       <form id="upload-form"
-        class="bg-white dark:bg-dark-800 rounded-xl shadow-lg p-4 mb-8 w-full" data-aos="fade-up">
-        <div class="space-y-6">
+        class="bg-white dark:bg-dark-800 rounded-xl shadow-lg p-4 mb-6 w-full" data-aos="fade-up">
+        <div class="space-y-4">
             
     
 
 <!-- IMAGE UPLOAD (Compact) -->
-<div class="w-full max-w-xs mx-auto">
+  <div class="w-full">
   <label for="image-input" class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Upload Image</label>
 
   
   <label for="image-input" id="upload-box"
-    class="relative flex items-center justify-center w-full h-32 bg-gray-50 dark:bg-dark-700 border border-dashed border-gray-300 dark:border-gray-600 rounded-md cursor-pointer overflow-hidden hover:border-primary-500 transition-all">
+    class="relative flex items-center justify-center w-full h-20 bg-gray-50 dark:bg-dark-700 border border-dashed border-gray-300 dark:border-gray-600 rounded-md cursor-pointer overflow-hidden hover:border-primary-500 transition-all">
     
     <i data-feather="upload" class="w-5 h-5 text-gray-400"></i>
     
@@ -128,22 +131,25 @@
           </button>
         </div>
       </form>
+    </main>
 
+    <!-- RIGHT COLUMN: progress, notes, and results -->
+    <div class="w-full lg:flex-1 lg:pl-6">
       <!-- PROGRESS BAR -->
-      <div id="progress-bar" class="hidden w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5 mb-8">
+      <div id="progress-bar" class="hidden w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5 mb-6">
         <div class="bg-primary-500 h-2.5 rounded-full" style="width: 0%"></div>
       </div>
 
-      <p id="note" class="text-sm text-gray-500 dark:text-gray-400 mb-8 text-center"></p>
+      <p id="note" class="text-sm text-gray-500 dark:text-gray-400 mb-6"></p>
 
       <h2 id="results-title"
-        class="text-2xl font-bold text-gray-900 dark:text-white mb-6 hidden text-center" data-aos="fade-up">
+        class="text-2xl font-bold text-gray-900 dark:text-white mb-4 hidden" data-aos="fade-up">
         Top Matches
       </h2>
 
       <div id="results"
-        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full"></div>
-    </main>
+        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 w-full"></div>
+    </div>
   </div>
 
   <!-- IMAGE MODAL -->
@@ -219,7 +225,7 @@
             <div class="relative group" data-aos="fade-up">
               <div class="absolute inset-0 bg-gradient-to-br from-primary-500 to-purple-600 rounded-xl opacity-75 group-hover:opacity-100 transition-opacity"></div>
               <img src="${e.target.result}" alt="Query Image"
-                class="relative z-10 w-full h-32 object-cover rounded-xl shadow-lg transform group-hover:-translate-y-1 transition-transform" />
+                class="relative z-10 w-full h-20 object-cover rounded-xl shadow-lg transform group-hover:-translate-y-1 transition-transform" />
             </div>
           `;
         };
